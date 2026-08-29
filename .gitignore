@@ -1,35 +1,44 @@
-```
-# Build outputs
-build/
-dist/
-*.apk
-*.aab
+```yaml
+name: Release
 
-# Dependencies
-node_modules/
-.gradle/
-.cargo/
+on:
+  push:
+    tags:
+      - 'v*'
 
-# IDE files
-.vscode/
-.idea/
-*.iml
-*.ipr
-*.iws
-
-# Environment
-.env
-.env.local
-.env.*
-
-# Logs
-*.log
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Android specific
-*.keystore
-local.properties
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+    
+    - name: Build
+      run: |
+        go build -ldflags="-s -w" -o gopaste cmd/gopaste/main.go
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    
+    - name: Upload Binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./gopaste
+        asset_name: gopaste-linux-amd64
+        asset_content_type: application/octet-stream
 ```
