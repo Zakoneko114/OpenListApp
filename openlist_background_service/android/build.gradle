@@ -1,7 +1,7 @@
 //package android
 // The Android Gradle Plugin builds the native code with the Android NDK.
 
-group 'com.github.openlist.openlist_background_service'
+group 'com.dykt.openlist_background_service'
 version '1.0'
 
 buildscript {
@@ -30,7 +30,7 @@ apply plugin: 'com.android.library'
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace 'com.github.openlist.openlist_background_service'
+        namespace 'com.dykt.openlist_background_service'
     }
 
     // Bumping the plugin compileSdkVersion requires all clients of this plugin
