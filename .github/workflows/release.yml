@@ -23,8 +23,8 @@ jobs:
           echo keyAlias='${{ secrets.KEY_ALIAS }}' >> key.properties
           echo storeFile='../key.jks' >> key.properties
           # 从 Secrets 读取无换行符 Base64 解码，然后保存到到 key.jks
-          # 使用 tr -d '\n' 移除所有换行符和空白字符后再解码
-          echo '${{ secrets.KEY_STORE }}' | tr -d '\n\r ' | base64 --decode > $GITHUB_WORKSPACE/android/key.jks
+          # 使用 tr -d '\n' 移除所有换行符后再解码
+          echo '${{ secrets.KEY_STORE }}' | tr -d '\n' | base64 --decode > $GITHUB_WORKSPACE/android/key.jks
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
